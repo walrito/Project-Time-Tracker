@@ -87,6 +87,7 @@
                 if (!string.IsNullOrEmpty(projectName))
                 {
                     int projectId = (int)cboProjectList.SelectedValue;
+                    if (projectId == 0) { projectName = "<Unassigned>"; }
                     bool recordExists = projectList.Any(p => string.Equals(p.ProjectName, projectName, StringComparison.CurrentCultureIgnoreCase));
                     ProjectList queryList = projectList.First(p => p.ProjectId == (int)cboProjectList.SelectedValue);
 

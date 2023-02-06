@@ -84,6 +84,7 @@
                 if (!string.IsNullOrEmpty(customerName))
                 {
                     int customerId = (int)cboCustomerList.SelectedValue;
+                    if (customerId == 0) { customerName = "<Unassigned>"; }
                     bool recordExists = customerList.Any(c => string.Equals(c.CustomerName, customerName, StringComparison.CurrentCultureIgnoreCase));
                     CustomerList queryList = customerList.First(c => c.CustomerId == (int)cboCustomerList.SelectedValue);
 
