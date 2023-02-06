@@ -48,13 +48,13 @@
         {
             string projectName = txtName.Text;
 
-            if (!string.IsNullOrEmpty(txtName.Text))
+            if (!string.IsNullOrEmpty(projectName))
             {
-                bool recordExists = projectList.Any(p => string.Equals(p.ProjectName, txtName.Text, StringComparison.CurrentCultureIgnoreCase));
+                bool recordExists = projectList.Any(p => string.Equals(p.ProjectName, projectName, StringComparison.CurrentCultureIgnoreCase));
 
                 if (!recordExists)
                 {
-                    int projectId = Project.AddProject(txtName.Text, cbActive.Checked, txtNotes.Text);
+                    int projectId = Project.AddProject(projectName, cbActive.Checked, txtNotes.Text);
 
                     for (int i = 0; i < clbCustomerList.Items.Count; i++)
                     {
@@ -81,20 +81,20 @@
         private void btnUpdate_Click(object sender, EventArgs e)
         {
             string projectName = txtName.Text;
-            int projectId = (int)cboProjectList.SelectedValue;
 
             if (cboProjectList.SelectedIndex > -1)
             {
-                if (!string.IsNullOrEmpty(txtName.Text))
+                if (!string.IsNullOrEmpty(projectName))
                 {
-                    bool recordExists = projectList.Any(p => string.Equals(p.ProjectName, txtName.Text, StringComparison.CurrentCultureIgnoreCase));
+                    int projectId = (int)cboProjectList.SelectedValue;
+                    bool recordExists = projectList.Any(p => string.Equals(p.ProjectName, projectName, StringComparison.CurrentCultureIgnoreCase));
                     ProjectList queryList = projectList.First(p => p.ProjectId == (int)cboProjectList.SelectedValue);
 
-                    if (!recordExists || (recordExists && string.Equals(queryList.ProjectName, txtName.Text, StringComparison.CurrentCultureIgnoreCase)))
+                    if (!recordExists || (recordExists && string.Equals(queryList.ProjectName, projectName, StringComparison.CurrentCultureIgnoreCase)))
                     {
                         if (MessageBox.Show("Removal of customers from project will delete associated time entries. Continue?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
                         {
-                            Project.UpdateProject(projectId, txtName.Text, cbActive.Checked, txtNotes.Text);
+                            Project.UpdateProject(projectId, projectName, cbActive.Checked, txtNotes.Text);
 
                             for (int i = 0; i < clbCustomerList.Items.Count; i++)
                             {

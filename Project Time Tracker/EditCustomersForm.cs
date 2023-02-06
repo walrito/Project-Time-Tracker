@@ -78,12 +78,12 @@
         private void btnUpdate_Click(object sender, EventArgs e)
         {
             string customerName = txtName.Text;
-            int customerId = (int)cboCustomerList.SelectedValue;
 
             if (cboCustomerList.SelectedIndex > -1)
             {
                 if (!string.IsNullOrEmpty(customerName))
                 {
+                    int customerId = (int)cboCustomerList.SelectedValue;
                     bool recordExists = customerList.Any(c => string.Equals(c.CustomerName, customerName, StringComparison.CurrentCultureIgnoreCase));
                     CustomerList queryList = customerList.First(c => c.CustomerId == (int)cboCustomerList.SelectedValue);
 
