@@ -164,7 +164,7 @@
         {
             customerProjectList = CustomerProject.GenerateCustomerProjectList(false);
             txtName.Text = "";
-            cbActive.Checked = false;
+            cbActive.Checked = true;
             txtNotes.Text = "";
         }
 
