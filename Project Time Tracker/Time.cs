@@ -58,7 +58,7 @@ namespace Project_Time_Tracker
         {
             TimeSpan ts = TimeSpan.FromMinutes(6);
             DateTime newStart = new(new DateTime(start.Year, start.Month, start.Day, start.Hour, start.Minute, 0, start.Kind).Ticks / ts.Ticks * ts.Ticks, start.Kind);
-            DateTime newEnd = new((new DateTime(end.Year, end.Month, end.Day, end.Hour, end.Minute, 0, end.Kind).Ticks + ts.Ticks - 1) / ts.Ticks * ts.Ticks, end.Kind);
+            DateTime newEnd = new((end.Ticks + ts.Ticks - 1) / ts.Ticks * ts.Ticks, end.Kind);
             double datediff = newEnd.Subtract(newStart).TotalMinutes / 60;
 
             return datediff.ToString();

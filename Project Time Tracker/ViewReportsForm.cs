@@ -32,63 +32,71 @@ namespace Project_Time_Tracker
             {
                 dtpStart.Enabled = true;
                 dtpEnd.Enabled = true;
-                cbCustomer.Enabled = true;
-                cbProject.Enabled = true;
+                cboCustomerList.Enabled = true;
+                cboProjectList.Enabled = true;
+                txtNotes.Enabled = true;
             }
             else if (cboReportType.SelectedIndex == 1)
             {
                 dtpStart.Enabled = false;
                 dtpEnd.Enabled = false;
-                cbCustomer.Enabled = true;
-                cbProject.Enabled = false;
+                cboCustomerList.Enabled = true;
+                cboProjectList.Enabled = false;
+                txtNotes.Enabled = false;
             }
             else if (cboReportType.SelectedIndex == 2)
             {
                 dtpStart.Enabled = false;
                 dtpEnd.Enabled = false;
-                cbCustomer.Enabled = false;
-                cbProject.Enabled = true;
+                cboCustomerList.Enabled = false;
+                cboProjectList.Enabled = true;
+                txtNotes.Enabled = true;
             }
             else if (cboReportType.SelectedIndex == 3)
             {
                 dtpStart.Enabled = false;
                 dtpEnd.Enabled = false;
-                cbCustomer.Enabled = true;
-                cbProject.Enabled = true;
+                cboCustomerList.Enabled = true;
+                cboProjectList.Enabled = true;
+                txtNotes.Enabled = true;
             }
         }
 
-        private void cbCustomer_CheckedChanged(object sender, EventArgs e)
+        private void cboCustomerList_EnabledChanged(object sender, EventArgs e)
         {
-            if (cbCustomer.Checked)
-            {
-                cboCustomerList.Enabled = true;
-                cbExactCustomer.Enabled = true;
-            }
-            else
+            if (!cboCustomerList.Enabled)
             {
                 cboCustomerList.SelectedIndex = -1;
                 cboCustomerList.Text = "";
-                cboCustomerList.Enabled = false;
                 cbExactCustomer.Checked = false;
                 cbExactCustomer.Enabled = false;
             }
+            else
+            {
+                cbExactCustomer.Enabled = true;
+            }
         }
 
-        private void cbProject_CheckedChanged(object sender, EventArgs e)
+        private void cboProjectList_EnabledChanged(object sender, EventArgs e)
         {
-            if (cbProject.Checked)
-            {
-                cboProjectList.Enabled = true;
-                cbExactProject.Enabled = true;
-            }
-            else
+            if (!cboProjectList.Enabled)
             {
                 cboProjectList.SelectedIndex = -1;
                 cboProjectList.Text = "";
-                cboProjectList.Enabled = false;
                 cbExactProject.Checked = false;
                 cbExactProject.Enabled = false;
+            }
+            else
+            {
+                cbExactProject.Enabled = true;
+            }
+        }
+
+        private void txtNotes_EnabledChanged(object sender, EventArgs e)
+        {
+            if (!txtNotes.Enabled)
+            {
+                txtNotes.Text = "";
             }
         }
 
@@ -144,10 +152,13 @@ namespace Project_Time_Tracker
             dgvResults.DataSource = null;
             dtpStart.Value = DateTime.Now.AddDays(-30);
             dtpEnd.Value = DateTime.Now;
-            cbCustomer.Checked = false;
+            cboCustomerList.SelectedIndex = -1;
+            cboCustomerList.Text = "";
             cbExactCustomer.Checked = false;
-            cbProject.Checked = false;
+            cboProjectList.SelectedIndex = -1;
+            cboProjectList.Text = "";
             cbExactProject.Checked = false;
+            txtNotes.Text = "";
         }
 
         private void PopulateCustomerList()
@@ -180,7 +191,7 @@ namespace Project_Time_Tracker
                 "inner join Projects p on p.ProjectID = cp.ProjectID " +
                 "where date(t.Start) >= date(@Start) and date(t.End) <= date(@End)";
 
-            if (cbCustomer.Checked && !string.IsNullOrEmpty(cboCustomerList.Text))
+            if (!string.IsNullOrEmpty(cboCustomerList.Text))
             {
                 SQLite.spl.Add(new SQLiteParameter("@CustomerName", cboCustomerList.Text));
                 if (cbExactCustomer.Checked)
@@ -192,7 +203,7 @@ namespace Project_Time_Tracker
                     query += " and c.CustomerName like '%' || @CustomerName || '%'";
                 }
             }
-            if (cbProject.Checked && !string.IsNullOrEmpty(cboProjectList.Text))
+            if (!string.IsNullOrEmpty(cboProjectList.Text))
             {
                 SQLite.spl.Add(new SQLiteParameter("@ProjectName", cboProjectList.Text));
                 if (cbExactProject.Checked)
@@ -203,6 +214,11 @@ namespace Project_Time_Tracker
                 {
                     query += " and p.ProjectName like '%' || @ProjectName || '%'";
                 }
+            }
+            if (!string.IsNullOrEmpty(txtNotes.Text))
+            {
+                SQLite.spl.Add(new SQLiteParameter("@TimeNotes", txtNotes.Text));
+                query += " and t.TimeNotes like '%' || @TimeNotes || '%'";
             }
             query += " order by c.CustomerName, p.ProjectName, t.Start";
 
@@ -215,7 +231,7 @@ namespace Project_Time_Tracker
 
             string query = "select c.CustomerName from Customers c";
 
-            if (cbCustomer.Checked && !string.IsNullOrEmpty(cboCustomerList.Text))
+            if (!string.IsNullOrEmpty(cboCustomerList.Text))
             {
                 SQLite.spl.Add(new SQLiteParameter("@CustomerName", cboCustomerList.Text));
                 if (cbExactCustomer.Checked)
@@ -236,19 +252,25 @@ namespace Project_Time_Tracker
         {
             dgvResults.DataSource = null;
 
-            string query = "select p.ProjectName, case p.Active when 1 then 'Yes' else 'No' end Active, p.ProjectNotes from Projects p";
+            string query = "select p.ProjectName, case p.Active when 1 then 'Yes' else 'No' end Active, p.ProjectNotes from Projects p " +
+                "where p.Active in (1, 0)";
 
-            if (cbProject.Checked && !string.IsNullOrEmpty(cboProjectList.Text))
+            if (!string.IsNullOrEmpty(cboProjectList.Text))
             {
                 SQLite.spl.Add(new SQLiteParameter("@ProjectName", cboProjectList.Text));
                 if (cbExactProject.Checked)
                 {
-                    query += " where p.ProjectName = @ProjectName";
+                    query += " and p.ProjectName = @ProjectName";
                 }
                 else
                 {
-                    query += " where p.ProjectName like '%' || @ProjectName || '%'";
+                    query += " and p.ProjectName like '%' || @ProjectName || '%'";
                 }
+            }
+            if (!string.IsNullOrEmpty(txtNotes.Text))
+            {
+                SQLite.spl.Add(new SQLiteParameter("@ProjectNotes", txtNotes.Text));
+                query += " and p.ProjectNotes like '%' || @ProjectNotes || '%'";
             }
             query += " order by p.ProjectName";
 
@@ -264,7 +286,7 @@ namespace Project_Time_Tracker
                 "inner join Projects p on p.ProjectID = cp.ProjectID " +
                 "where p.Active in (1, 0)";
 
-            if (cbCustomer.Checked && !string.IsNullOrEmpty(cboCustomerList.Text))
+            if (!string.IsNullOrEmpty(cboCustomerList.Text))
             {
                 SQLite.spl.Add(new SQLiteParameter("@CustomerName", cboCustomerList.Text));
                 if (cbExactCustomer.Checked)
@@ -276,7 +298,7 @@ namespace Project_Time_Tracker
                     query += " and c.CustomerName like '%' || @CustomerName || '%'";
                 }
             }
-            if (cbProject.Checked && !string.IsNullOrEmpty(cboProjectList.Text))
+            if (!string.IsNullOrEmpty(cboProjectList.Text))
             {
                 SQLite.spl.Add(new SQLiteParameter("@ProjectName", cboProjectList.Text));
                 if (cbExactProject.Checked)
@@ -287,6 +309,11 @@ namespace Project_Time_Tracker
                 {
                     query += " and p.ProjectName like '%' || @ProjectName || '%'";
                 }
+            }
+            if (!string.IsNullOrEmpty(txtNotes.Text))
+            {
+                SQLite.spl.Add(new SQLiteParameter("@ProjectNotes", txtNotes.Text));
+                query += " and p.ProjectNotes like '%' || @ProjectNotes || '%'";
             }
             query += " order by c.CustomerName, p.ProjectName";
 
