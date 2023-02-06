@@ -138,20 +138,20 @@
             // 
             // dtpStart
             // 
-            this.dtpStart.CustomFormat = "yyyy-MM-dd HH:mm";
+            this.dtpStart.CustomFormat = "yyyy-MM-dd HH:mm:ss";
             this.dtpStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpStart.Location = new System.Drawing.Point(77, 141);
             this.dtpStart.Name = "dtpStart";
-            this.dtpStart.Size = new System.Drawing.Size(125, 23);
+            this.dtpStart.Size = new System.Drawing.Size(140, 23);
             this.dtpStart.TabIndex = 4;
             // 
             // dtpEnd
             // 
-            this.dtpEnd.CustomFormat = "yyyy-MM-dd HH:mm";
+            this.dtpEnd.CustomFormat = "yyyy-MM-dd HH:mm:ss";
             this.dtpEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpEnd.Location = new System.Drawing.Point(77, 170);
             this.dtpEnd.Name = "dtpEnd";
-            this.dtpEnd.Size = new System.Drawing.Size(125, 23);
+            this.dtpEnd.Size = new System.Drawing.Size(140, 23);
             this.dtpEnd.TabIndex = 6;
             // 
             // lblStart
