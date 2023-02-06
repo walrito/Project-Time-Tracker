@@ -47,6 +47,7 @@
             this.btnDeleteAll = new System.Windows.Forms.Button();
             this.lblTimeList = new System.Windows.Forms.Label();
             this.clbTimeList = new System.Windows.Forms.CheckedListBox();
+            this.cbSelectAll = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // lblProject
@@ -97,7 +98,7 @@
             // 
             // btnDelete
             // 
-            this.btnDelete.Location = new System.Drawing.Point(327, 41);
+            this.btnDelete.Location = new System.Drawing.Point(327, 66);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(75, 23);
             this.btnDelete.TabIndex = 16;
@@ -202,7 +203,7 @@
             // 
             // btnDeleteAll
             // 
-            this.btnDeleteAll.Location = new System.Drawing.Point(327, 70);
+            this.btnDeleteAll.Location = new System.Drawing.Point(327, 95);
             this.btnDeleteAll.Name = "btnDeleteAll";
             this.btnDeleteAll.Size = new System.Drawing.Size(75, 23);
             this.btnDeleteAll.TabIndex = 17;
@@ -228,12 +229,24 @@
             this.clbTimeList.TabIndex = 2;
             this.clbTimeList.SelectedIndexChanged += new System.EventHandler(this.clbTimeList_SelectedIndexChanged);
             // 
+            // cbSelectAll
+            // 
+            this.cbSelectAll.AutoSize = true;
+            this.cbSelectAll.Location = new System.Drawing.Point(327, 41);
+            this.cbSelectAll.Name = "cbSelectAll";
+            this.cbSelectAll.Size = new System.Drawing.Size(74, 19);
+            this.cbSelectAll.TabIndex = 19;
+            this.cbSelectAll.Text = "Select All";
+            this.cbSelectAll.UseVisualStyleBackColor = true;
+            this.cbSelectAll.CheckedChanged += new System.EventHandler(this.cbSelectAll_CheckedChanged);
+            // 
             // EditTimesForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnClose;
             this.ClientSize = new System.Drawing.Size(414, 378);
+            this.Controls.Add(this.cbSelectAll);
             this.Controls.Add(this.clbTimeList);
             this.Controls.Add(this.lblTimeList);
             this.Controls.Add(this.btnDeleteAll);
@@ -286,5 +299,6 @@
         private Button btnDeleteAll;
         private Label lblTimeList;
         private CheckedListBox clbTimeList;
+        private CheckBox cbSelectAll;
     }
 }

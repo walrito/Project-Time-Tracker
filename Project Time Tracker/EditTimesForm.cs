@@ -111,6 +111,14 @@ namespace Project_Time_Tracker
             }
         }
 
+        private void cbSelectAll_CheckedChanged(object sender, EventArgs e)
+        {
+            for (int i = 0; i < clbTimeList.Items.Count; i++)
+            {
+                clbTimeList.SetItemChecked(i, cbSelectAll.Checked);
+            }
+        }
+
         private void btnDelete_Click(object sender, EventArgs e)
         {
             if (clbTimeList.CheckedItems.Count > 0)
@@ -130,7 +138,7 @@ namespace Project_Time_Tracker
 
         private void btnDeleteAll_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Delete all time entries?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (MessageBox.Show("Delete all time entries for all customer projects?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 Time.DeleteTime(-1, true);
                 RefreshLists();
@@ -159,6 +167,7 @@ namespace Project_Time_Tracker
         {
             DateTime curDateTime = DateTime.Now;
             clbTimeList.Items.Clear();
+            cbSelectAll.Checked = false;
             dtpStart.Value = curDateTime;
             dtpEnd.Value = curDateTime;
             txtNotes.Text = "";
@@ -208,6 +217,7 @@ namespace Project_Time_Tracker
         }
 
         #endregion
+
     }
 
     public class TimeListItem
