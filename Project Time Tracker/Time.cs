@@ -56,10 +56,7 @@ namespace Project_Time_Tracker
 
         public static string RoundTime(DateTime start, DateTime end)
         {
-            TimeSpan ts = TimeSpan.FromMinutes(6);
-            DateTime newStart = new(new DateTime(start.Year, start.Month, start.Day, start.Hour, start.Minute, 0, start.Kind).Ticks / ts.Ticks * ts.Ticks, start.Kind);
-            DateTime newEnd = new((end.Ticks + ts.Ticks - 1) / ts.Ticks * ts.Ticks, end.Kind);
-            double datediff = newEnd.Subtract(newStart).TotalMinutes / 60;
+            double datediff = Math.Round(end.Subtract(start).TotalMinutes / 60, 2);
 
             return datediff.ToString();
         }
