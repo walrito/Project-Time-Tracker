@@ -54,11 +54,18 @@ namespace Project_Time_Tracker
             SQLite.ExecuteNonQuery(deleteQuery, SQLite.spl, "ProjectTimeTracker");
         }
 
-        public static string RoundTime(DateTime start, DateTime end)
+        public static string GetDuration(DateTime start, DateTime end)
         {
-            double datediff = Math.Round(end.Subtract(start).TotalMinutes / 60, 2);
+            DateTime newStart = new(start.Year, start.Month, start.Day, start.Hour, start.Minute, start.Second, start.Kind);
+            DateTime newEnd = new(end.Year, end.Month, end.Day, end.Hour, end.Minute, end.Second, end.Kind);
+            return newEnd.Subtract(newStart).ToString(@"d\:hh\:mm\:ss");
+        }
 
-            return datediff.ToString();
+        public static string GetDurationDecimal(DateTime start, DateTime end)
+        {
+            DateTime newStart = new(start.Year, start.Month, start.Day, start.Hour, start.Minute, start.Second, start.Kind);
+            DateTime newEnd = new(end.Year, end.Month, end.Day, end.Hour, end.Minute, end.Second, end.Kind);
+            return ((Math.Ceiling(newEnd.Subtract(newStart).TotalMinutes / 6.0) * 6.0) / 60).ToString();
         }
     }
 

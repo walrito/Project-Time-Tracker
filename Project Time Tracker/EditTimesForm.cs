@@ -57,8 +57,8 @@ namespace Project_Time_Tracker
             if (!string.IsNullOrEmpty(dtpStart.Value.ToString()) && !string.IsNullOrEmpty(dtpEnd.Value.ToString()))
             {
                 if (dtpStart.Value <= dtpEnd.Value)
-                    if (Time.AddTime(dtpStart.Value.ToString(@"yyyy-MM-dd HH\:mm\:ss"), dtpEnd.Value.ToString(@"yyyy-MM-dd HH\:mm\:ss"), dtpEnd.Value.Subtract(dtpStart.Value).ToString(@"d\:hh\:mm\:ss"),
-                        Time.RoundTime(dtpStart.Value, dtpEnd.Value), txtNotes.Text, CustomerProject.GetCustomerProjectId(Customer.GetCustomerId(cboCustomerList.Text), Project.GetProjectId(cboProjectList.Text))) == -1)
+                    if (Time.AddTime(dtpStart.Value.ToString(@"yyyy-MM-dd HH\:mm\:ss"), dtpEnd.Value.ToString(@"yyyy-MM-dd HH\:mm\:ss"), Time.GetDuration(dtpStart.Value, dtpEnd.Value),
+                        Time.GetDurationDecimal(dtpStart.Value, dtpEnd.Value), txtNotes.Text, CustomerProject.GetCustomerProjectId(Customer.GetCustomerId(cboCustomerList.Text), Project.GetProjectId(cboProjectList.Text))) == -1)
                     {
                         MessageBox.Show("Failed to record time entry. Check logs for details.");
                     }
@@ -88,8 +88,8 @@ namespace Project_Time_Tracker
                 if (!string.IsNullOrEmpty(dtpStart.Value.ToString()) && !string.IsNullOrEmpty(dtpEnd.Value.ToString()))
                 {
                     if (dtpStart.Value <= dtpEnd.Value)
-                        if (Time.UpdateTime(tli.TimeId, dtpStart.Value.ToString(@"yyyy-MM-dd HH\:mm\:ss"), dtpEnd.Value.ToString(@"yyyy-MM-dd HH\:mm\:ss"), dtpEnd.Value.Subtract(dtpStart.Value).ToString(@"d\:hh\:mm\:ss"),
-                            Time.RoundTime(dtpStart.Value, dtpEnd.Value), txtNotes.Text, CustomerProject.GetCustomerProjectId(Customer.GetCustomerId(cboCustomerList.Text), Project.GetProjectId(cboProjectList.Text))) == -1)
+                        if (Time.UpdateTime(tli.TimeId, dtpStart.Value.ToString(@"yyyy-MM-dd HH\:mm\:ss"), dtpEnd.Value.ToString(@"yyyy-MM-dd HH\:mm\:ss"), Time.GetDuration(dtpStart.Value, dtpEnd.Value),
+                            Time.GetDurationDecimal(dtpStart.Value, dtpEnd.Value), txtNotes.Text, CustomerProject.GetCustomerProjectId(Customer.GetCustomerId(cboCustomerList.Text), Project.GetProjectId(cboProjectList.Text))) == -1)
                         {
                             MessageBox.Show("Failed to record time entry. Check logs for details.");
                         }

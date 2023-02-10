@@ -175,8 +175,8 @@ namespace Project_Time_Tracker
 
         private void RecordTime(DateTime endTime)
         {
-            if (Time.AddTime(startTime.ToString(@"yyyy-MM-dd HH\:mm\:ss"), endTime.ToString(@"yyyy-MM-dd HH\:mm\:ss"), endTime.Subtract(startTime).ToString(@"d\:hh\:mm\:ss"),
-                Time.RoundTime(startTime, endTime), txtNotes.Text, CustomerProject.GetCustomerProjectId(Customer.GetCustomerId(cboCustomerList.Text), Project.GetProjectId(cboProjectList.Text))) == -1)
+            if (Time.AddTime(startTime.ToString(@"yyyy-MM-dd HH\:mm\:ss"), endTime.ToString(@"yyyy-MM-dd HH\:mm\:ss"), Time.GetDuration(startTime, endTime),
+                Time.GetDurationDecimal(startTime, endTime), txtNotes.Text, CustomerProject.GetCustomerProjectId(Customer.GetCustomerId(cboCustomerList.Text), Project.GetProjectId(cboProjectList.Text))) == -1)
             {
                 MessageBox.Show("Failed to record time entry. Check logs for details.");
             }
