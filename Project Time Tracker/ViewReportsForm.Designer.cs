@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.dgvResults = new System.Windows.Forms.DataGridView();
             this.btnClose = new System.Windows.Forms.Button();
             this.dtpStart = new System.Windows.Forms.DateTimePicker();
             this.dtpEnd = new System.Windows.Forms.DateTimePicker();
@@ -46,21 +45,12 @@
             this.txtNotes = new System.Windows.Forms.TextBox();
             this.cbExactProject = new System.Windows.Forms.CheckBox();
             this.cbExactCustomer = new System.Windows.Forms.CheckBox();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvResults)).BeginInit();
+            this.wvResults = new Microsoft.Web.WebView2.WinForms.WebView2();
+            this.btnExportToCsv = new System.Windows.Forms.Button();
+            this.sfdExport = new System.Windows.Forms.SaveFileDialog();
             this.gbTimes.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.wvResults)).BeginInit();
             this.SuspendLayout();
-            // 
-            // dgvResults
-            // 
-            this.dgvResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgvResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvResults.Location = new System.Drawing.Point(249, 12);
-            this.dgvResults.Name = "dgvResults";
-            this.dgvResults.RowTemplate.Height = 25;
-            this.dgvResults.Size = new System.Drawing.Size(1003, 628);
-            this.dgvResults.TabIndex = 3;
             // 
             // btnClose
             // 
@@ -242,6 +232,32 @@
             this.cbExactCustomer.Text = "Exact";
             this.cbExactCustomer.UseVisualStyleBackColor = true;
             // 
+            // wvResults
+            // 
+            this.wvResults.AllowExternalDrop = true;
+            this.wvResults.CreationProperties = null;
+            this.wvResults.DefaultBackgroundColor = System.Drawing.Color.White;
+            this.wvResults.Location = new System.Drawing.Point(249, 12);
+            this.wvResults.Name = "wvResults";
+            this.wvResults.Size = new System.Drawing.Size(1003, 628);
+            this.wvResults.TabIndex = 6;
+            this.wvResults.ZoomFactor = 1D;
+            // 
+            // btnExportToCsv
+            // 
+            this.btnExportToCsv.Location = new System.Drawing.Point(249, 646);
+            this.btnExportToCsv.Name = "btnExportToCsv";
+            this.btnExportToCsv.Size = new System.Drawing.Size(87, 23);
+            this.btnExportToCsv.TabIndex = 7;
+            this.btnExportToCsv.Text = "Export to CSV";
+            this.btnExportToCsv.UseVisualStyleBackColor = true;
+            this.btnExportToCsv.Click += new System.EventHandler(this.btnExportToCsv_Click);
+            // 
+            // sfdExport
+            // 
+            this.sfdExport.DefaultExt = "csv";
+            this.sfdExport.Filter = "CSV files|*.csv";
+            // 
             // ViewReportsForm
             // 
             this.AcceptButton = this.btnSearch;
@@ -249,28 +265,27 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnClose;
             this.ClientSize = new System.Drawing.Size(1264, 681);
+            this.Controls.Add(this.btnExportToCsv);
+            this.Controls.Add(this.wvResults);
             this.Controls.Add(this.gbTimes);
             this.Controls.Add(this.cboReportType);
             this.Controls.Add(this.btnRefresh);
             this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.btnClose);
-            this.Controls.Add(this.dgvResults);
             this.MinimumSize = new System.Drawing.Size(960, 540);
             this.Name = "ViewReportsForm";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Reports";
             this.Load += new System.EventHandler(this.ViewTimesForm_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvResults)).EndInit();
             this.gbTimes.ResumeLayout(false);
             this.gbTimes.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.wvResults)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private DataGridView dgvResults;
         private Button btnClose;
         private DateTimePicker dtpStart;
         private DateTimePicker dtpEnd;
@@ -288,5 +303,8 @@
         private Label lblProject;
         private Label lblNotes;
         private TextBox txtNotes;
+        private Microsoft.Web.WebView2.WinForms.WebView2 wvResults;
+        private Button btnExportToCsv;
+        private SaveFileDialog sfdExport;
     }
 }

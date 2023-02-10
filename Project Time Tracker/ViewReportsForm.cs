@@ -1,10 +1,16 @@
 ﻿using Elements.Database;
+using Elements.Logger;
+using System.Data;
 using System.Data.SQLite;
+using System.Net;
+using System.Text;
 
 namespace Project_Time_Tracker
 {
     public partial class ViewReportsForm : Form
     {
+        DataTable? dtReport = null;
+
         public ViewReportsForm()
         {
             InitializeComponent();
@@ -130,6 +136,18 @@ namespace Project_Time_Tracker
             {
                 SearchAssignments();
             }
+            if (dtReport != null) { BuildHtml(dtReport); }
+        }
+
+        private void btnExportToCsv_Click(object sender, EventArgs e)
+        {
+            if (dtReport != null)
+            {
+                if (sfdExport.ShowDialog() == DialogResult.OK)
+                {
+                    ExportReport(dtReport, sfdExport.FileName);
+                }
+            }
         }
 
         private void btnClose_Click(object sender, EventArgs e)
@@ -149,7 +167,8 @@ namespace Project_Time_Tracker
 
         private void ResetFields()
         {
-            dgvResults.DataSource = null;
+            wvResults.Source = new Uri("about:blank");
+            dtReport = null;
             dtpStart.Value = DateTime.Now.AddDays(-30);
             dtpEnd.Value = DateTime.Now;
             cboCustomerList.SelectedIndex = -1;
@@ -181,26 +200,20 @@ namespace Project_Time_Tracker
 
         private void SearchTimes()
         {
-            dgvResults.DataSource = null;
-
             SQLite.spl.Add(new SQLiteParameter("@Start", dtpStart.Value));
             SQLite.spl.Add(new SQLiteParameter("@End", dtpEnd.Value));
-            string query = "select c.CustomerName, p.ProjectName, t.Start, t.End, t.Duration, t.DurationDecimal, t.TimeNotes from Times t " +
-                "inner join CustomerProject cp on cp.CustomerProjectID = t.CustomerProjectID " +
-                "inner join Customers c on c.CustomerID = cp.CustomerID " +
-                "inner join Projects p on p.ProjectID = cp.ProjectID " +
-                "where date(t.Start) >= date(@Start) and date(t.End) <= date(@End)";
 
+            string whereClause = "where date(t.Start) >= date(@Start) and date(t.End) <= date(@End) ";
             if (!string.IsNullOrEmpty(cboCustomerList.Text))
             {
                 SQLite.spl.Add(new SQLiteParameter("@CustomerName", cboCustomerList.Text));
                 if (cbExactCustomer.Checked)
                 {
-                    query += " and c.CustomerName = @CustomerName";
+                    whereClause += "and c.CustomerName = @CustomerName ";
                 }
                 else
                 {
-                    query += " and c.CustomerName like '%' || @CustomerName || '%'";
+                    whereClause += "and c.CustomerName like '%' || @CustomerName || '%' ";
                 }
             }
             if (!string.IsNullOrEmpty(cboProjectList.Text))
@@ -208,94 +221,100 @@ namespace Project_Time_Tracker
                 SQLite.spl.Add(new SQLiteParameter("@ProjectName", cboProjectList.Text));
                 if (cbExactProject.Checked)
                 {
-                    query += " and p.ProjectName = @ProjectName";
+                    whereClause += "and p.ProjectName = @ProjectName ";
                 }
                 else
                 {
-                    query += " and p.ProjectName like '%' || @ProjectName || '%'";
+                    whereClause += "and p.ProjectName like '%' || @ProjectName || '%' ";
                 }
             }
             if (!string.IsNullOrEmpty(txtNotes.Text))
             {
                 SQLite.spl.Add(new SQLiteParameter("@TimeNotes", txtNotes.Text));
-                query += " and t.TimeNotes like '%' || @TimeNotes || '%'";
+                whereClause += "and t.TimeNotes like '%' || @TimeNotes || '%' ";
             }
-            query += " order by c.CustomerName, p.ProjectName, t.Start";
 
-            dgvResults.DataSource = SQLite.FillDataTable(query, SQLite.spl, "ProjectTimeTracker");
+            string query = "select 'summary' Type, c.CustomerName 'Customer Name', p.ProjectName 'Project Name', date(t.Start) Start, '' End, '' Duration, round(sum(t.durationdecimal), 2) 'Duration Decimal', '' 'Time Notes' from times t " +
+                "inner join CustomerProject cp on cp.CustomerProjectID = t.CustomerProjectID " +
+                "inner join Customers c on c.CustomerID = cp.CustomerID " +
+                "inner join Projects p on p.ProjectID = cp.ProjectID " +
+                whereClause +
+                "group by t.CustomerProjectID, date(t.Start) " +
+                "union " +
+                "select 'data' Type, c.CustomerName 'Customer Name', p.ProjectName 'Project Name', t.Start, t.End, t.Duration, t.DurationDecimal 'Duration Decimal', t.TimeNotes 'Time Notes' from Times t " +
+                "inner join CustomerProject cp on cp.CustomerProjectID = t.CustomerProjectID " +
+                "inner join Customers c on c.CustomerID = cp.CustomerID " +
+                "inner join Projects p on p.ProjectID = cp.ProjectID " +
+                whereClause +
+                "order by c.CustomerName, p.ProjectName, t.Start";
+
+            dtReport = SQLite.FillDataTable(query, SQLite.spl, "ProjectTimeTracker");
         }
 
         private void SearchCustomers()
         {
-            dgvResults.DataSource = null;
-
-            string query = "select c.CustomerName from Customers c";
-
+            string whereClause = "where c.CustomerID > -1 ";
             if (!string.IsNullOrEmpty(cboCustomerList.Text))
             {
                 SQLite.spl.Add(new SQLiteParameter("@CustomerName", cboCustomerList.Text));
                 if (cbExactCustomer.Checked)
                 {
-                    query += " where c.CustomerName = @CustomerName";
+                    whereClause += "and c.CustomerName = @CustomerName ";
                 }
                 else
                 {
-                    query += " where c.CustomerName like '%' || @CustomerName || '%'";
+                    whereClause += "and c.CustomerName like '%' || @CustomerName || '%' ";
                 }
             }
-            query += " order by c.CustomerName";
 
-            dgvResults.DataSource = SQLite.FillDataTable(query, SQLite.spl, "ProjectTimeTracker");
+            string query = "select 'data' Type, c.CustomerName 'Customer Name' from Customers c " +
+                whereClause +
+                "order by c.CustomerName";
+
+            dtReport = SQLite.FillDataTable(query, SQLite.spl, "ProjectTimeTracker");
         }
 
         private void SearchProjects()
         {
-            dgvResults.DataSource = null;
-
-            string query = "select p.ProjectName, case p.Active when 1 then 'Yes' else 'No' end Active, p.ProjectNotes from Projects p " +
-                "where p.Active in (1, 0)";
-
+            string whereClause = "where p.ProjectID > -1 ";
             if (!string.IsNullOrEmpty(cboProjectList.Text))
             {
                 SQLite.spl.Add(new SQLiteParameter("@ProjectName", cboProjectList.Text));
                 if (cbExactProject.Checked)
                 {
-                    query += " and p.ProjectName = @ProjectName";
+                    whereClause += "and p.ProjectName = @ProjectName ";
                 }
                 else
                 {
-                    query += " and p.ProjectName like '%' || @ProjectName || '%'";
+                    whereClause += "and p.ProjectName like '%' || @ProjectName || '%' ";
                 }
             }
             if (!string.IsNullOrEmpty(txtNotes.Text))
             {
                 SQLite.spl.Add(new SQLiteParameter("@ProjectNotes", txtNotes.Text));
-                query += " and p.ProjectNotes like '%' || @ProjectNotes || '%'";
+                whereClause += "and p.ProjectNotes like '%' || @ProjectNotes || '%' ";
             }
-            query += " order by p.ProjectName";
 
-            dgvResults.DataSource = SQLite.FillDataTable(query, SQLite.spl, "ProjectTimeTracker");
+            string query = "select 'data' Type, p.ProjectName 'Project Name', case p.Active when 1 then 'Yes' else 'No' end Active, p.ProjectNotes 'Project Notes' from Projects p " +
+                whereClause +
+                "order by p.ProjectName";
+
+            dtReport = SQLite.FillDataTable(query, SQLite.spl, "ProjectTimeTracker");
         }
 
         private void SearchAssignments()
         {
-            dgvResults.DataSource = null;
-
-            string query = "select c.CustomerName, p.ProjectName, case p.Active when 1 then 'Yes' else 'No' end Active, p.ProjectNotes from CustomerProject cp " +
-                "inner join Customers c on c.CustomerID = cp.CustomerID " +
-                "inner join Projects p on p.ProjectID = cp.ProjectID " +
-                "where p.Active in (1, 0)";
-
+            string whereClause = "where p.Active in (1, 0) ";
             if (!string.IsNullOrEmpty(cboCustomerList.Text))
             {
                 SQLite.spl.Add(new SQLiteParameter("@CustomerName", cboCustomerList.Text));
                 if (cbExactCustomer.Checked)
                 {
-                    query += " and c.CustomerName = @CustomerName";
+                    whereClause += "and c.CustomerName = @CustomerName ";
                 }
                 else
                 {
-                    query += " and c.CustomerName like '%' || @CustomerName || '%'";
+                    whereClause += "and c.CustomerName like '%' || @CustomerName || '%' ";
                 }
             }
             if (!string.IsNullOrEmpty(cboProjectList.Text))
@@ -303,21 +322,130 @@ namespace Project_Time_Tracker
                 SQLite.spl.Add(new SQLiteParameter("@ProjectName", cboProjectList.Text));
                 if (cbExactProject.Checked)
                 {
-                    query += " and p.ProjectName = @ProjectName";
+                    whereClause += "and p.ProjectName = @ProjectName ";
                 }
                 else
                 {
-                    query += " and p.ProjectName like '%' || @ProjectName || '%'";
+                    whereClause += "and p.ProjectName like '%' || @ProjectName || '%' ";
                 }
             }
             if (!string.IsNullOrEmpty(txtNotes.Text))
             {
                 SQLite.spl.Add(new SQLiteParameter("@ProjectNotes", txtNotes.Text));
-                query += " and p.ProjectNotes like '%' || @ProjectNotes || '%'";
+                whereClause += "and p.ProjectNotes like '%' || @ProjectNotes || '%' ";
             }
-            query += " order by c.CustomerName, p.ProjectName";
 
-            dgvResults.DataSource = SQLite.FillDataTable(query, SQLite.spl, "ProjectTimeTracker");
+            string query = "select 'data' Type, c.CustomerName 'Customer Name', p.ProjectName 'Project Name', case p.Active when 1 then 'Yes' else 'No' end Active, p.ProjectNotes 'Project Notes' from CustomerProject cp " +
+                "inner join Customers c on c.CustomerID = cp.CustomerID " +
+                "inner join Projects p on p.ProjectID = cp.ProjectID " +
+                whereClause +
+                "order by c.CustomerName, p.ProjectName";
+
+            dtReport = SQLite.FillDataTable(query, SQLite.spl, "ProjectTimeTracker");
+        }
+
+        private void BuildHtml(DataTable dt)
+        {
+            try
+            {
+                StringBuilder html = new();
+                string? nextRowType = "";
+                bool firstDataRow = false;
+
+                html.AppendLine("<!DOCTYPE html>");
+                html.AppendLine("<head>");
+                html.AppendLine("   <title>Project Time Tracker Report</title>");
+                html.AppendLine("   <style>");
+                html.AppendLine("       .reportTable { background-color: #EEEEEE; width: 100%; text-align: left; border-collapse: collapse; white-space: pre-line; }");
+                html.AppendLine("       .reportTable td, .reportTable th { border: 1px solid #AAAAAA; padding: 3px 2px; }");
+                html.AppendLine("       .reportTable tbody td { font-size: 13px; -webkit-touch-callout:all; -webkit-user-select:all; -khtml-user-select:all; -moz-user-select:all; -ms-user-select:all; -o-user-select:all; user-select:all; }");
+                html.AppendLine("       .reportTable thead { background: #AABCCA; border-bottom: 2px solid #444444; }");
+                html.AppendLine("       .reportTable thead th { font-size: 15px; font-weight: bold; text-align: center; }");
+                html.AppendLine("       .summaryRow { background: #AAAAAA; font-weight: bold; }");
+                html.AppendLine("       .dataRow tr:nth-child(odd) { background: #C8DDED; }");
+                html.AppendLine("   </style>");
+                html.AppendLine("</head>");
+                html.AppendLine("<body>");
+                html.AppendLine("   <table class='reportTable'>");
+                html.AppendLine("       <thead>");
+                html.AppendLine("           <tr>");
+                for (int i = 1; i < dt.Columns.Count; i++)
+                {
+                    html.AppendLine("               <th>" + WebUtility.UrlDecode(WebUtility.HtmlEncode((dt.Columns[i].ToString()))) + "</th>");
+                }
+                html.AppendLine("           </tr>");
+                html.AppendLine("       </thead>");
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    nextRowType = i + 1 < dt.Rows.Count ? dt.Rows[i + 1][0].ToString() : "";
+                    if (i == 0 || dt.Rows[i][0].ToString() == "summary") { firstDataRow = true; };
+                    if (dt.Rows[i][0].ToString() == "summary")
+                    {
+                        html.AppendLine("       <tbody class='summaryRow'>");
+                        html.AppendLine("           <tr>");
+                        for (int j = 1; j < dt.Columns.Count; j++)
+                        {
+                            html.AppendLine("               <td>" + WebUtility.UrlDecode(WebUtility.HtmlEncode((dt.Rows[i][j].ToString()))) + "</td>");
+                        }
+                        html.AppendLine("           </tr>");
+                        html.AppendLine("       </tbody>");
+                    }
+                    else if (dt.Rows[i][0].ToString() == "data")
+                    {
+                        if (firstDataRow) { html.AppendLine("       <tbody class='dataRow'>"); firstDataRow = false; }
+                        html.AppendLine("           <tr>");
+                        for (int j = 1; j < dt.Columns.Count; j++)
+                        {
+                            html.AppendLine("               <td>" + WebUtility.UrlDecode(WebUtility.HtmlEncode((dt.Rows[i][j].ToString()))) + "</td>");
+                        }
+                        html.AppendLine("           </tr>");
+                        if (i == dt.Rows.Count - 1 || nextRowType == "summary") { html.AppendLine("       </tbody>"); }
+                    }
+                }
+
+                html.AppendLine("   </table>");
+                html.AppendLine("</body>");
+                html.AppendLine("</html>");
+                File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\') + "\\report.html", html.ToString());
+                Uri htmlReportFile = new(AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\') + "\\report.html");
+                wvResults.Source = new Uri("about:blank");
+                wvResults.Source = htmlReportFile;
+            }
+            catch (Exception ex)
+            {
+                Logging.LogMessage("ErrorLog", ex.Message, "error", "BuildHtml");
+                MessageBox.Show("Unable to generate data. See logs for details.");
+            }
+        }
+
+        private void ExportReport(DataTable dt, string savePath)
+        {
+            try
+            {
+                StringBuilder sb = new();
+                for (int i = 1; i < dt.Columns.Count; i++)
+                {
+                    sb.Append(string.Concat("\"", dt.Columns[i].ToString().Replace("\"", "\"\""), "\""));
+                    if (i < dt.Columns.Count - 1) { sb.Append(","); }
+                }
+                sb.AppendLine();
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    for (int j = 1; j < dt.Columns.Count; j++)
+                    {
+                        sb.Append(string.Concat("\"", (dt.Rows[i][j].ToString() ?? "").Replace("\"", "\"\""), "\""));
+                        if (j < dt.Columns.Count - 1) { sb.Append(","); }
+                    }
+                    sb.AppendLine();
+                }
+                File.WriteAllText(savePath, sb.ToString());
+                MessageBox.Show("CSV exported to '" + savePath + "'");
+            }
+            catch (Exception ex)
+            {
+                Logging.LogMessage("ErrorLog", ex.Message, "error", "ExportReport");
+                MessageBox.Show("Unable to export CSV. See logs for details.");
+            }
         }
 
         #endregion
