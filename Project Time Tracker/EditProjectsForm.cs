@@ -18,7 +18,7 @@
             ResetFields();
         }
 
-        #region FormObjects
+        #region Form Objects
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {

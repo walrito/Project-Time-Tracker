@@ -1,6 +1,4 @@
-﻿using System.Xml.Linq;
-
-namespace Project_Time_Tracker
+﻿namespace Project_Time_Tracker
 {
     public partial class EditTimesForm : Form
     {
@@ -18,7 +16,7 @@ namespace Project_Time_Tracker
             ResetFields();
         }
 
-        #region FormObjects
+        #region Form Objects
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
@@ -195,7 +193,6 @@ namespace Project_Time_Tracker
             {
                 clbTimeList.Items.Add(new TimeListItem { TimeId = time.TimeId, TimeSpan = time.TimeSpan });
             }
-
         }
 
         private void PopulateCustomerList()
@@ -217,7 +214,6 @@ namespace Project_Time_Tracker
         }
 
         #endregion
-
     }
 
     public class TimeListItem

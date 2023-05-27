@@ -106,6 +106,16 @@ namespace Project_Time_Tracker
             }
         }
 
+        private void dtpStart_ValueChanged(object sender, EventArgs e)
+        {
+            if (dtpEnd.Value < dtpStart.Value) { dtpEnd.Value = dtpStart.Value; }
+        }
+
+        private void dtpEnd_ValueChanged(object sender, EventArgs e)
+        {
+            if (dtpEnd.Value < dtpStart.Value) { dtpStart.Value = dtpEnd.Value; }
+        }
+
         private void btnSearch_Click(object sender, EventArgs e)
         {
             if (cboReportType.SelectedIndex == 0)
@@ -169,7 +179,7 @@ namespace Project_Time_Tracker
         {
             wvResults.Source = new Uri("about:blank");
             dtReport = null;
-            dtpStart.Value = DateTime.Now.AddDays(-30);
+            dtpStart.Value = DateTime.Now.AddDays(-6);
             dtpEnd.Value = DateTime.Now;
             cboCustomerList.SelectedIndex = -1;
             cboCustomerList.Text = "";
@@ -234,19 +244,24 @@ namespace Project_Time_Tracker
                 whereClause += "and t.TimeNotes like '%' || @TimeNotes || '%' ";
             }
 
-            string query = "select 'summary' Type, c.CustomerName 'Customer Name', p.ProjectName 'Project Name', date(t.Start) Start, '' End, '' Duration, round(sum(t.durationdecimal), 2) 'Duration Decimal', '' 'Time Notes' from times t " +
+            string query = "with TimesList as ( " +
+                "select '1' Type, t.CustomerProjectID, t.Start, t.End, t.Duration, t.DurationDecimal, t.TimeNotes from Times t " +
                 "inner join CustomerProject cp on cp.CustomerProjectID = t.CustomerProjectID " +
                 "inner join Customers c on c.CustomerID = cp.CustomerID " +
                 "inner join Projects p on p.ProjectID = cp.ProjectID " +
                 whereClause +
-                "group by t.CustomerProjectID, date(t.Start) " +
                 "union " +
-                "select 'data' Type, c.CustomerName 'Customer Name', p.ProjectName 'Project Name', t.Start, t.End, t.Duration, t.DurationDecimal 'Duration Decimal', t.TimeNotes 'Time Notes' from Times t " +
+                "select '0' Type, t.CustomerProjectID, date(t.Start) Start, '', '', round(sum(t.durationdecimal), 2), '' from Times t " +
                 "inner join CustomerProject cp on cp.CustomerProjectID = t.CustomerProjectID " +
                 "inner join Customers c on c.CustomerID = cp.CustomerID " +
                 "inner join Projects p on p.ProjectID = cp.ProjectID " +
                 whereClause +
-                "order by c.CustomerName, p.ProjectName, t.Start";
+                "group by date(t.Start), t.CustomerProjectID) " +
+                "select tl.Type, c.CustomerName 'Customer Name', p.ProjectName 'Project Name', tl.Start, tl.End, tl.Duration, tl.DurationDecimal 'Duration Decimal', tl.TimeNotes 'Time Notes' from TimesList tl " +
+                "inner join CustomerProject cp on cp.CustomerProjectID = tl.CustomerProjectID " +
+                "inner join Customers c on c.CustomerID = cp.CustomerID " +
+                "inner join Projects p on p.ProjectID = cp.ProjectID " +
+                "order by date(tl.Start), dense_rank() over (order by date(tl.Start), c.CustomerName, p.ProjectName), tl.Type, c.CustomerName, p.ProjectName";
 
             dtReport = SQLite.FillDataTable(query, SQLite.spl, "ProjectTimeTracker");
         }
@@ -267,7 +282,7 @@ namespace Project_Time_Tracker
                 }
             }
 
-            string query = "select 'data' Type, c.CustomerName 'Customer Name' from Customers c " +
+            string query = "select '1' Type, c.CustomerName 'Customer Name' from Customers c " +
                 whereClause +
                 "order by c.CustomerName";
 
@@ -295,7 +310,7 @@ namespace Project_Time_Tracker
                 whereClause += "and p.ProjectNotes like '%' || @ProjectNotes || '%' ";
             }
 
-            string query = "select 'data' Type, p.ProjectName 'Project Name', case p.Active when 1 then 'Yes' else 'No' end Active, p.ProjectNotes 'Project Notes' from Projects p " +
+            string query = "select '1' Type, p.ProjectName 'Project Name', case p.Active when 1 then 'Yes' else 'No' end Active, p.ProjectNotes 'Project Notes' from Projects p " +
                 whereClause +
                 "order by p.ProjectName";
 
@@ -335,7 +350,7 @@ namespace Project_Time_Tracker
                 whereClause += "and p.ProjectNotes like '%' || @ProjectNotes || '%' ";
             }
 
-            string query = "select 'data' Type, c.CustomerName 'Customer Name', p.ProjectName 'Project Name', case p.Active when 1 then 'Yes' else 'No' end Active, p.ProjectNotes 'Project Notes' from CustomerProject cp " +
+            string query = "select '1' Type, c.CustomerName 'Customer Name', p.ProjectName 'Project Name', case p.Active when 1 then 'Yes' else 'No' end Active, p.ProjectNotes 'Project Notes' from CustomerProject cp " +
                 "inner join Customers c on c.CustomerID = cp.CustomerID " +
                 "inner join Projects p on p.ProjectID = cp.ProjectID " +
                 whereClause +
@@ -378,8 +393,8 @@ namespace Project_Time_Tracker
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     nextRowType = i + 1 < dt.Rows.Count ? dt.Rows[i + 1][0].ToString() : "";
-                    if (i == 0 || dt.Rows[i][0].ToString() == "summary") { firstDataRow = true; };
-                    if (dt.Rows[i][0].ToString() == "summary")
+                    if (i == 0 || dt.Rows[i][0].ToString() == "0") { firstDataRow = true; };
+                    if (dt.Rows[i][0].ToString() == "0")
                     {
                         html.AppendLine("       <tbody class='summaryRow'>");
                         html.AppendLine("           <tr>");
@@ -390,7 +405,7 @@ namespace Project_Time_Tracker
                         html.AppendLine("           </tr>");
                         html.AppendLine("       </tbody>");
                     }
-                    else if (dt.Rows[i][0].ToString() == "data")
+                    else if (dt.Rows[i][0].ToString() == "1")
                     {
                         if (firstDataRow) { html.AppendLine("       <tbody class='dataRow'>"); firstDataRow = false; }
                         html.AppendLine("           <tr>");
@@ -399,7 +414,7 @@ namespace Project_Time_Tracker
                             html.AppendLine("               <td>" + WebUtility.UrlDecode(WebUtility.HtmlEncode((dt.Rows[i][j].ToString()))) + "</td>");
                         }
                         html.AppendLine("           </tr>");
-                        if (i == dt.Rows.Count - 1 || nextRowType == "summary") { html.AppendLine("       </tbody>"); }
+                        if (i == dt.Rows.Count - 1 || nextRowType == "0") { html.AppendLine("       </tbody>"); }
                     }
                 }
 
@@ -449,5 +464,6 @@ namespace Project_Time_Tracker
         }
 
         #endregion
+
     }
 }

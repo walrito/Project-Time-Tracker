@@ -37,6 +37,7 @@
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.customerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.projectsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.assignmentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editTimesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reportsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,6 +54,7 @@
             this.lblCustomer = new System.Windows.Forms.Label();
             this.cboCustomerList = new System.Windows.Forms.ComboBox();
             this.cboCustomerProjectList = new System.Windows.Forms.ComboBox();
+            this.btnPause = new System.Windows.Forms.Button();
             this.msMain.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -102,6 +104,7 @@
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.customerToolStripMenuItem,
             this.projectsToolStripMenuItem,
+            this.assignmentsToolStripMenuItem,
             this.editTimesToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
@@ -110,21 +113,28 @@
             // customerToolStripMenuItem
             // 
             this.customerToolStripMenuItem.Name = "customerToolStripMenuItem";
-            this.customerToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
+            this.customerToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.customerToolStripMenuItem.Text = "&Customers";
             this.customerToolStripMenuItem.Click += new System.EventHandler(this.customerToolStripMenuItem_Click);
             // 
             // projectsToolStripMenuItem
             // 
             this.projectsToolStripMenuItem.Name = "projectsToolStripMenuItem";
-            this.projectsToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
+            this.projectsToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.projectsToolStripMenuItem.Text = "&Projects";
             this.projectsToolStripMenuItem.Click += new System.EventHandler(this.projectsToolStripMenuItem_Click);
+            // 
+            // assignmentsToolStripMenuItem
+            // 
+            this.assignmentsToolStripMenuItem.Name = "assignmentsToolStripMenuItem";
+            this.assignmentsToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.assignmentsToolStripMenuItem.Text = "&Assignments";
+            this.assignmentsToolStripMenuItem.Click += new System.EventHandler(this.assignmentsToolStripMenuItem_Click);
             // 
             // editTimesToolStripMenuItem
             // 
             this.editTimesToolStripMenuItem.Name = "editTimesToolStripMenuItem";
-            this.editTimesToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
+            this.editTimesToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.editTimesToolStripMenuItem.Text = "&Times";
             this.editTimesToolStripMenuItem.Click += new System.EventHandler(this.editTimesToolStripMenuItem_Click);
             // 
@@ -257,12 +267,24 @@
             this.cboCustomerProjectList.TabIndex = 1;
             this.cboCustomerProjectList.SelectedIndexChanged += new System.EventHandler(this.cboCustomerProject_SelectedIndexChanged);
             // 
+            // btnPause
+            // 
+            this.btnPause.Enabled = false;
+            this.btnPause.Location = new System.Drawing.Point(245, 241);
+            this.btnPause.Name = "btnPause";
+            this.btnPause.Size = new System.Drawing.Size(75, 23);
+            this.btnPause.TabIndex = 13;
+            this.btnPause.Text = "Pause";
+            this.btnPause.UseVisualStyleBackColor = true;
+            this.btnPause.Click += new System.EventHandler(this.btnPause_Click);
+            // 
             // MainForm
             // 
             this.AcceptButton = this.btnToggleTimer;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(413, 276);
+            this.Controls.Add(this.btnPause);
             this.Controls.Add(this.cboCustomerProjectList);
             this.Controls.Add(this.lblCustomer);
             this.Controls.Add(this.cboCustomerList);
@@ -317,5 +339,7 @@
         private ComboBox cboCustomerList;
         private ToolStripMenuItem reportsToolStripMenuItem;
         private ComboBox cboCustomerProjectList;
+        private ToolStripMenuItem assignmentsToolStripMenuItem;
+        private Button btnPause;
     }
 }

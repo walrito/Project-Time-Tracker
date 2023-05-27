@@ -8,9 +8,11 @@ namespace Project_Time_Tracker
         private List<CustomerProjectList> customerProjectList = new();
         private List<CustomerList> customerList = new();
         private List<ProjectList> projectList = new();
+        private List<Tuple<DateTime, DateTime>> timerList = new();
         private int timerSeconds;
         private TimeSpan timerDuration;
         private DateTime startTime;
+        private bool paused = false;
 
         public MainForm()
         {
@@ -28,7 +30,7 @@ namespace Project_Time_Tracker
             PopulateProjectList();
         }
 
-        #region FormObjects
+        #region Form Objects
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -50,6 +52,13 @@ namespace Project_Time_Tracker
         private void projectsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EditProjectsForm f = new();
+            f.ShowDialog();
+            RefreshFields();
+        }
+
+        private void assignmentsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            EditAssignmentsForm f = new();
             f.ShowDialog();
             RefreshFields();
         }
@@ -84,9 +93,21 @@ namespace Project_Time_Tracker
             }
         }
 
+        private void btnPause_Click(object sender, EventArgs e)
+        {
+            if (tmrMain.Enabled && !paused)
+            {
+                PauseTrackingTime();
+            }
+            else
+            {
+                ResumeTrackingTime();
+            }
+        }
+
         private void btnToggleTimer_Click(object sender, EventArgs e)
         {
-            if (tmrMain.Enabled)
+            if (tmrMain.Enabled || paused)
             {
                 StopTrackingTime();
             }
@@ -110,6 +131,9 @@ namespace Project_Time_Tracker
         private void RefreshFields()
         {
             tmrMain.Stop();
+            btnPause.Enabled = false;
+            paused = false;
+            btnPause.Text = "Pause";
             btnToggleTimer.Text = "Start";
             timerSeconds = 0;
             editToolStripMenuItem.Enabled = true;
@@ -158,7 +182,9 @@ namespace Project_Time_Tracker
         private void StartTrackingTime()
         {
             editToolStripMenuItem.Enabled = false;
+            paused = false;
             tmrMain.Start();
+            btnPause.Enabled = true;
             btnToggleTimer.Text = "Stop";
             startTime = DateTime.Now;
             txtTimerStart.Text = startTime.ToString(@"yyyy-MM-dd HH\:mm\:ss");
@@ -166,14 +192,35 @@ namespace Project_Time_Tracker
 
         private void StopTrackingTime()
         {
-            editToolStripMenuItem.Enabled = true;
             tmrMain.Stop();
-            btnToggleTimer.Text = "Start";
-            RecordTime(DateTime.Now);
+            if (!paused) timerList.Add(new Tuple<DateTime, DateTime>(startTime, DateTime.Now));
+            foreach (var t in timerList)
+            {
+                RecordTime(t.Item1, t.Item2);
+            }
+            editToolStripMenuItem.Enabled = true;
+            paused = false;
+            timerList.Clear();
             RefreshFields();
         }
 
-        private void RecordTime(DateTime endTime)
+        private void PauseTrackingTime()
+        {
+            tmrMain.Stop();
+            timerList.Add(new Tuple<DateTime, DateTime>(startTime, DateTime.Now));
+            paused = true;
+            btnPause.Text = "Resume";
+        }
+
+        private void ResumeTrackingTime()
+        {
+            tmrMain.Start();
+            paused = false;
+            btnPause.Text = "Pause";
+            startTime = DateTime.Now;
+        }
+
+        private void RecordTime(DateTime startTime, DateTime endTime)
         {
             if (Time.AddTime(startTime.ToString(@"yyyy-MM-dd HH\:mm\:ss"), endTime.ToString(@"yyyy-MM-dd HH\:mm\:ss"), Time.GetDuration(startTime, endTime),
                 Time.GetDurationDecimal(startTime, endTime), txtNotes.Text, CustomerProject.GetCustomerProjectId(Customer.GetCustomerId(cboCustomerList.Text), Project.GetProjectId(cboProjectList.Text))) == -1)
@@ -183,5 +230,6 @@ namespace Project_Time_Tracker
         }
 
         #endregion
+
     }
 }

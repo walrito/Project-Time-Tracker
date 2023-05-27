@@ -71,6 +71,7 @@
             this.dtpStart.Name = "dtpStart";
             this.dtpStart.Size = new System.Drawing.Size(95, 23);
             this.dtpStart.TabIndex = 7;
+            this.dtpStart.ValueChanged += new System.EventHandler(this.dtpStart_ValueChanged);
             // 
             // dtpEnd
             // 
@@ -80,6 +81,7 @@
             this.dtpEnd.Name = "dtpEnd";
             this.dtpEnd.Size = new System.Drawing.Size(95, 23);
             this.dtpEnd.TabIndex = 9;
+            this.dtpEnd.ValueChanged += new System.EventHandler(this.dtpEnd_ValueChanged);
             // 
             // lblStart
             // 
@@ -235,6 +237,9 @@
             // wvResults
             // 
             this.wvResults.AllowExternalDrop = true;
+            this.wvResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.wvResults.CreationProperties = null;
             this.wvResults.DefaultBackgroundColor = System.Drawing.Color.White;
             this.wvResults.Location = new System.Drawing.Point(249, 12);
@@ -245,6 +250,7 @@
             // 
             // btnExportToCsv
             // 
+            this.btnExportToCsv.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnExportToCsv.Location = new System.Drawing.Point(249, 646);
             this.btnExportToCsv.Name = "btnExportToCsv";
             this.btnExportToCsv.Size = new System.Drawing.Size(87, 23);
