@@ -48,6 +48,7 @@
             this.lblTimeList = new System.Windows.Forms.Label();
             this.clbTimeList = new System.Windows.Forms.CheckedListBox();
             this.cbSelectAll = new System.Windows.Forms.CheckBox();
+            this.btnMigrate = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lblProject
@@ -92,7 +93,7 @@
             this.cboCustomerProjectList.FormattingEnabled = true;
             this.cboCustomerProjectList.Location = new System.Drawing.Point(77, 12);
             this.cboCustomerProjectList.Name = "cboCustomerProjectList";
-            this.cboCustomerProjectList.Size = new System.Drawing.Size(325, 23);
+            this.cboCustomerProjectList.Size = new System.Drawing.Size(244, 23);
             this.cboCustomerProjectList.TabIndex = 0;
             this.cboCustomerProjectList.SelectedIndexChanged += new System.EventHandler(this.cboCustomerProjectList_SelectedIndexChanged);
             // 
@@ -240,12 +241,23 @@
             this.cbSelectAll.UseVisualStyleBackColor = true;
             this.cbSelectAll.CheckedChanged += new System.EventHandler(this.cbSelectAll_CheckedChanged);
             // 
+            // btnMigrate
+            // 
+            this.btnMigrate.Location = new System.Drawing.Point(327, 12);
+            this.btnMigrate.Name = "btnMigrate";
+            this.btnMigrate.Size = new System.Drawing.Size(75, 23);
+            this.btnMigrate.TabIndex = 20;
+            this.btnMigrate.Text = "Migrate";
+            this.btnMigrate.UseVisualStyleBackColor = true;
+            this.btnMigrate.Click += new System.EventHandler(this.btnMigrate_Click);
+            // 
             // EditTimesForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnClose;
             this.ClientSize = new System.Drawing.Size(414, 378);
+            this.Controls.Add(this.btnMigrate);
             this.Controls.Add(this.cbSelectAll);
             this.Controls.Add(this.clbTimeList);
             this.Controls.Add(this.lblTimeList);
@@ -300,5 +312,6 @@
         private Label lblTimeList;
         private CheckedListBox clbTimeList;
         private CheckBox cbSelectAll;
+        private Button btnMigrate;
     }
 }

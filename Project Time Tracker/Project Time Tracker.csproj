@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <None Remove="EditTimesForm.resx~RF18b11da0.TMP" />
+    <None Remove="MigrateTimesForm.Designer.cs~RFe118b6c.TMP" />
   </ItemGroup>
 
   <ItemGroup>

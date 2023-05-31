@@ -109,6 +109,14 @@
             }
         }
 
+        private void btnMigrate_Click(object sender, EventArgs e)
+        {
+            MigrateTimesForm f = new();
+            f.ShowDialog();
+            RefreshLists();
+            ResetFields();
+        }
+
         private void cbSelectAll_CheckedChanged(object sender, EventArgs e)
         {
             for (int i = 0; i < clbTimeList.Items.Count; i++)
@@ -214,6 +222,7 @@
         }
 
         #endregion
+
     }
 
     public class TimeListItem
