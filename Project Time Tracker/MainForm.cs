@@ -30,6 +30,11 @@ namespace Project_Time_Tracker
             PopulateProjectList();
         }
 
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            StopTrackingTime();
+        }
+
         #region Form Objects
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
