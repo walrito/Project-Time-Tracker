@@ -18,6 +18,8 @@ namespace Elements.Database
                 {
                     Logging.LogMessage("SystemLog", "Database not found, creating file", "log", "CheckDb");
                     SQLiteConnection.CreateFile(AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\') + "\\" + dbName + ".sqlite");
+                    PopulateDatabaseTables(dbName);
+                    PopulateDefaultTableValues(dbName);
                 }
             }
             catch (Exception ex)

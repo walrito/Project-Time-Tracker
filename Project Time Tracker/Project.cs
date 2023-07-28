@@ -19,6 +19,7 @@ namespace Project_Time_Tracker
                 {
                     projectList.Add(new ProjectList() { ProjectId = dr.GetInt32(0), ProjectName = dr.GetString(1), ProjectNotes = dr.GetString(2), Active = dr.GetBoolean(3) });
                 }
+                dr.Close();
             }
 
             return projectList;
@@ -70,6 +71,7 @@ namespace Project_Time_Tracker
                 {
                     projectId = dr.GetInt32(0);
                 }
+                dr.Close();
             }
             else
             {

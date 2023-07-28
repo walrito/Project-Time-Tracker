@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.cboCustomerList = new System.Windows.Forms.ComboBox();
             this.txtName = new System.Windows.Forms.TextBox();
             this.btnDelete = new System.Windows.Forms.Button();
@@ -39,29 +40,30 @@
             this.btnDeleteAll = new System.Windows.Forms.Button();
             this.lblProjects = new System.Windows.Forms.Label();
             this.clbProjectList = new System.Windows.Forms.CheckedListBox();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
             // 
             // cboCustomerList
             // 
             this.cboCustomerList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboCustomerList.FormattingEnabled = true;
-            this.cboCustomerList.Location = new System.Drawing.Point(67, 12);
+            this.cboCustomerList.Location = new System.Drawing.Point(69, 12);
             this.cboCustomerList.Name = "cboCustomerList";
-            this.cboCustomerList.Size = new System.Drawing.Size(325, 23);
+            this.cboCustomerList.Size = new System.Drawing.Size(322, 23);
             this.cboCustomerList.TabIndex = 0;
             this.cboCustomerList.SelectedIndexChanged += new System.EventHandler(this.cboCustomerList_SelectedIndexChanged);
             // 
             // txtName
             // 
-            this.txtName.Location = new System.Drawing.Point(67, 41);
+            this.txtName.Location = new System.Drawing.Point(69, 42);
             this.txtName.MaxLength = 100;
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(244, 23);
+            this.txtName.Size = new System.Drawing.Size(322, 23);
             this.txtName.TabIndex = 2;
             // 
             // btnDelete
             // 
-            this.btnDelete.Location = new System.Drawing.Point(317, 41);
+            this.btnDelete.Location = new System.Drawing.Point(397, 12);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(75, 23);
             this.btnDelete.TabIndex = 8;
@@ -71,7 +73,7 @@
             // 
             // btnUpdate
             // 
-            this.btnUpdate.Location = new System.Drawing.Point(236, 170);
+            this.btnUpdate.Location = new System.Drawing.Point(316, 171);
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.Size = new System.Drawing.Size(75, 23);
             this.btnUpdate.TabIndex = 6;
@@ -81,7 +83,7 @@
             // 
             // btnAdd
             // 
-            this.btnAdd.Location = new System.Drawing.Point(155, 170);
+            this.btnAdd.Location = new System.Drawing.Point(235, 171);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 23);
             this.btnAdd.TabIndex = 5;
@@ -92,7 +94,7 @@
             // lblName
             // 
             this.lblName.AutoSize = true;
-            this.lblName.Location = new System.Drawing.Point(12, 44);
+            this.lblName.Location = new System.Drawing.Point(12, 45);
             this.lblName.Name = "lblName";
             this.lblName.Size = new System.Drawing.Size(39, 15);
             this.lblName.TabIndex = 1;
@@ -111,7 +113,7 @@
             // 
             // btnClose
             // 
-            this.btnClose.Location = new System.Drawing.Point(317, 170);
+            this.btnClose.Location = new System.Drawing.Point(478, 171);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 7;
@@ -121,7 +123,7 @@
             // 
             // btnDeleteAll
             // 
-            this.btnDeleteAll.Location = new System.Drawing.Point(317, 70);
+            this.btnDeleteAll.Location = new System.Drawing.Point(478, 12);
             this.btnDeleteAll.Name = "btnDeleteAll";
             this.btnDeleteAll.Size = new System.Drawing.Size(75, 23);
             this.btnDeleteAll.TabIndex = 9;
@@ -132,7 +134,7 @@
             // lblProjects
             // 
             this.lblProjects.AutoSize = true;
-            this.lblProjects.Location = new System.Drawing.Point(12, 70);
+            this.lblProjects.Location = new System.Drawing.Point(12, 71);
             this.lblProjects.Name = "lblProjects";
             this.lblProjects.Size = new System.Drawing.Size(49, 15);
             this.lblProjects.TabIndex = 3;
@@ -141,17 +143,17 @@
             // clbProjectList
             // 
             this.clbProjectList.FormattingEnabled = true;
-            this.clbProjectList.Location = new System.Drawing.Point(67, 70);
+            this.clbProjectList.Location = new System.Drawing.Point(69, 71);
             this.clbProjectList.Name = "clbProjectList";
-            this.clbProjectList.Size = new System.Drawing.Size(244, 94);
+            this.clbProjectList.Size = new System.Drawing.Size(322, 94);
             this.clbProjectList.TabIndex = 4;
+            this.clbProjectList.SelectedIndexChanged += new System.EventHandler(this.clbProjectList_SelectedIndexChanged);
             // 
             // EditCustomersForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.btnClose;
-            this.ClientSize = new System.Drawing.Size(404, 205);
+            this.ClientSize = new System.Drawing.Size(565, 206);
             this.Controls.Add(this.clbProjectList);
             this.Controls.Add(this.lblProjects);
             this.Controls.Add(this.btnDeleteAll);
@@ -188,5 +190,6 @@
         private Button btnDeleteAll;
         private Label lblProjects;
         private CheckedListBox clbProjectList;
+        private ToolTip toolTip1;
     }
 }

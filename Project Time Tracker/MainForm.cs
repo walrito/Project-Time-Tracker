@@ -19,8 +19,6 @@ namespace Project_Time_Tracker
             InitializeComponent();
 
             SQLite.CreateDatabase("ProjectTimeTracker");
-            SQLite.PopulateDatabaseTables("ProjectTimeTracker");
-            SQLite.PopulateDefaultTableValues("ProjectTimeTracker");
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -57,13 +55,6 @@ namespace Project_Time_Tracker
         private void projectsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EditProjectsForm f = new();
-            f.ShowDialog();
-            RefreshFields();
-        }
-
-        private void assignmentsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            EditAssignmentsForm f = new();
             f.ShowDialog();
             RefreshFields();
         }

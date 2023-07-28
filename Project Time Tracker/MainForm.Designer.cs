@@ -37,7 +37,6 @@
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.customerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.projectsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.assignmentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editTimesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reportsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -104,7 +103,6 @@
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.customerToolStripMenuItem,
             this.projectsToolStripMenuItem,
-            this.assignmentsToolStripMenuItem,
             this.editTimesToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
@@ -113,28 +111,21 @@
             // customerToolStripMenuItem
             // 
             this.customerToolStripMenuItem.Name = "customerToolStripMenuItem";
-            this.customerToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.customerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.customerToolStripMenuItem.Text = "&Customers";
             this.customerToolStripMenuItem.Click += new System.EventHandler(this.customerToolStripMenuItem_Click);
             // 
             // projectsToolStripMenuItem
             // 
             this.projectsToolStripMenuItem.Name = "projectsToolStripMenuItem";
-            this.projectsToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.projectsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.projectsToolStripMenuItem.Text = "&Projects";
             this.projectsToolStripMenuItem.Click += new System.EventHandler(this.projectsToolStripMenuItem_Click);
-            // 
-            // assignmentsToolStripMenuItem
-            // 
-            this.assignmentsToolStripMenuItem.Name = "assignmentsToolStripMenuItem";
-            this.assignmentsToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
-            this.assignmentsToolStripMenuItem.Text = "&Assignments";
-            this.assignmentsToolStripMenuItem.Click += new System.EventHandler(this.assignmentsToolStripMenuItem_Click);
             // 
             // editTimesToolStripMenuItem
             // 
             this.editTimesToolStripMenuItem.Name = "editTimesToolStripMenuItem";
-            this.editTimesToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.editTimesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.editTimesToolStripMenuItem.Text = "&Times";
             this.editTimesToolStripMenuItem.Click += new System.EventHandler(this.editTimesToolStripMenuItem_Click);
             // 
@@ -340,7 +331,6 @@
         private ComboBox cboCustomerList;
         private ToolStripMenuItem reportsToolStripMenuItem;
         private ComboBox cboCustomerProjectList;
-        private ToolStripMenuItem assignmentsToolStripMenuItem;
         private Button btnPause;
     }
 }

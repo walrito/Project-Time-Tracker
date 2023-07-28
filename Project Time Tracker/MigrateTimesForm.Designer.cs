@@ -59,11 +59,11 @@
             // cbDelete
             // 
             this.cbDelete.AutoSize = true;
-            this.cbDelete.Location = new System.Drawing.Point(137, 70);
+            this.cbDelete.Location = new System.Drawing.Point(203, 70);
             this.cbDelete.Name = "cbDelete";
-            this.cbDelete.Size = new System.Drawing.Size(248, 19);
+            this.cbDelete.Size = new System.Drawing.Size(182, 19);
             this.cbDelete.TabIndex = 2;
-            this.cbDelete.Text = "Delete Source Assignment After Migration";
+            this.cbDelete.Text = "Delete Source After Migration";
             this.cbDelete.UseVisualStyleBackColor = true;
             // 
             // lblSource

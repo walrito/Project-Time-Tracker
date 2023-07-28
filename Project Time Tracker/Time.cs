@@ -18,6 +18,7 @@ namespace Project_Time_Tracker
                 {
                     timeList.Add(new TimeList() { TimeId = dr.GetInt32(0), Start = dr.GetDateTime(1), End = dr.GetDateTime(2), TimeSpan = dr.GetString(3), TimeNotes = dr.GetString(4) });
                 }
+                dr.Close();
             }
 
             return timeList;

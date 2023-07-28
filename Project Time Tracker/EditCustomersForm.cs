@@ -41,6 +41,15 @@
             }
         }
 
+        private void clbProjectList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (clbProjectList.SelectedIndex > -1)
+            {
+                string tt = projectList.First(p => p.ProjectId == ((ProjectListItem)clbProjectList.Items[clbProjectList.SelectedIndex]).ProjectId).ProjectNotes;
+                toolTip1.SetToolTip(clbProjectList, tt);
+            }
+        }
+
         private void btnAdd_Click(object sender, EventArgs e)
         {
             string customerName = txtName.Text;
@@ -182,17 +191,19 @@
             clbProjectList.Items.Clear();
             foreach (ProjectList project in projectList)
             {
-                clbProjectList.Items.Add(new ProjectListItem { ProjectId = project.ProjectId, ProjectName = project.ProjectName });
+                clbProjectList.Items.Add(new ProjectListItem { ProjectId = project.ProjectId, ProjectName = project.ProjectName, ProjectNotes = project.ProjectNotes });
             }
         }
 
         #endregion
+
     }
 
     public class ProjectListItem
     {
         public int ProjectId { get; set; }
         public string? ProjectName { get; set; }
+        public string? ProjectNotes { get; set; }
 
         public override string ToString() => !string.IsNullOrEmpty(ProjectName) ? ProjectName : "";
     }

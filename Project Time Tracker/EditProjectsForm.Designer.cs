@@ -59,7 +59,7 @@
             this.cboProjectList.FormattingEnabled = true;
             this.cboProjectList.Location = new System.Drawing.Point(82, 12);
             this.cboProjectList.Name = "cboProjectList";
-            this.cboProjectList.Size = new System.Drawing.Size(325, 23);
+            this.cboProjectList.Size = new System.Drawing.Size(309, 23);
             this.cboProjectList.TabIndex = 0;
             this.cboProjectList.SelectedIndexChanged += new System.EventHandler(this.cboProjectList_SelectedIndexChanged);
             // 
@@ -68,12 +68,12 @@
             this.txtName.Location = new System.Drawing.Point(82, 41);
             this.txtName.MaxLength = 100;
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(244, 23);
+            this.txtName.Size = new System.Drawing.Size(309, 23);
             this.txtName.TabIndex = 2;
             // 
             // btnDelete
             // 
-            this.btnDelete.Location = new System.Drawing.Point(332, 41);
+            this.btnDelete.Location = new System.Drawing.Point(397, 12);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(75, 23);
             this.btnDelete.TabIndex = 11;
@@ -83,7 +83,7 @@
             // 
             // btnUpdate
             // 
-            this.btnUpdate.Location = new System.Drawing.Point(251, 281);
+            this.btnUpdate.Location = new System.Drawing.Point(316, 281);
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.Size = new System.Drawing.Size(75, 23);
             this.btnUpdate.TabIndex = 9;
@@ -93,7 +93,7 @@
             // 
             // btnAdd
             // 
-            this.btnAdd.Location = new System.Drawing.Point(170, 281);
+            this.btnAdd.Location = new System.Drawing.Point(235, 281);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 23);
             this.btnAdd.TabIndex = 8;
@@ -107,7 +107,7 @@
             this.txtNotes.MaxLength = 1000;
             this.txtNotes.Multiline = true;
             this.txtNotes.Name = "txtNotes";
-            this.txtNotes.Size = new System.Drawing.Size(244, 80);
+            this.txtNotes.Size = new System.Drawing.Size(309, 80);
             this.txtNotes.TabIndex = 5;
             // 
             // lblNotes
@@ -144,7 +144,7 @@
             // 
             // btnClose
             // 
-            this.btnClose.Location = new System.Drawing.Point(332, 281);
+            this.btnClose.Location = new System.Drawing.Point(478, 281);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 10;
@@ -154,7 +154,7 @@
             // 
             // btnDeleteAll
             // 
-            this.btnDeleteAll.Location = new System.Drawing.Point(332, 70);
+            this.btnDeleteAll.Location = new System.Drawing.Point(478, 12);
             this.btnDeleteAll.Name = "btnDeleteAll";
             this.btnDeleteAll.Size = new System.Drawing.Size(75, 23);
             this.btnDeleteAll.TabIndex = 12;
@@ -167,7 +167,7 @@
             this.clbCustomerList.FormattingEnabled = true;
             this.clbCustomerList.Location = new System.Drawing.Point(82, 181);
             this.clbCustomerList.Name = "clbCustomerList";
-            this.clbCustomerList.Size = new System.Drawing.Size(244, 94);
+            this.clbCustomerList.Size = new System.Drawing.Size(309, 94);
             this.clbCustomerList.TabIndex = 7;
             // 
             // lblCustomers
@@ -184,7 +184,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnClose;
-            this.ClientSize = new System.Drawing.Size(419, 316);
+            this.ClientSize = new System.Drawing.Size(565, 316);
             this.Controls.Add(this.clbCustomerList);
             this.Controls.Add(this.lblCustomers);
             this.Controls.Add(this.btnDeleteAll);

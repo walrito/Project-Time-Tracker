@@ -18,6 +18,7 @@ namespace Project_Time_Tracker
                 {
                     customerList.Add(new CustomerList { CustomerId = dr.GetInt32(0), CustomerName = dr.GetString(1) });
                 }
+                dr.Close();
             }
 
             return customerList;
@@ -65,6 +66,7 @@ namespace Project_Time_Tracker
                 {
                     customerId = dr.GetInt32(0);
                 }
+                dr.Close();
             }
             else
             {
